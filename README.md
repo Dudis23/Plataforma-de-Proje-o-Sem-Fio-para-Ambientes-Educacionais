@@ -115,49 +115,6 @@ gst-launch-1.0 udpsrc port=5000 ! tsdemux ! h264parse ! avdec_h264 \
   ! videoconvert ! xvimagesink sync=false
 ```
 
-## Como gerar/clonar a imagem do sistema
-
-Duas opções, dependendo do que você precisa:
-
-### A) Só os arquivos de configuração (recomendado — leve, cabe no Git)
-Rode este script na própria TV Box para reunir os arquivos citados acima em uma
-pasta `configs/` pronta para copiar para o repositório:
-```bash
-mkdir -p ~/repo-configs
-cp /etc/NetworkManager/conf.d/99-unmanaged-wlan0.conf ~/repo-configs/
-cp /etc/systemd/system/miracle-wifid.service ~/repo-configs/
-cp /usr/local/bin/miracle-gst ~/repo-configs/
-cp ~/.miraclecastrc ~/repo-configs/miraclecastrc
-cp ~/.xinitrc ~/repo-configs/xinitrc
-grep -A3 "startx" ~/.zprofile > ~/repo-configs/zprofile-snippet.sh
-echo "Arquivos coletados em ~/repo-configs — copie para configs/ no repositório"
-```
-Depois, transfira essa pasta para o seu computador (via `scp`, já que a TV Box só é
-acessível por SSH/Ethernet) e suba para o GitHub normalmente:
-```bash
-# no seu computador
-scp -r root@<IP_DA_TV_BOX>:~/repo-configs ./configs
-```
-
-### B) Imagem completa do sistema (.img) — mais pesada, útil para "clonar" a TV Box inteira
-A eMMC aparece como `/dev/mmcblk2` (14,6 GiB). Para gerar uma imagem, conecte um
-pendrive/HD USB na TV Box (evite gravar a imagem na própria eMMC que está sendo lida):
-```bash
-lsblk                      # confirme o dispositivo do pendrive, ex. /dev/sda1
-mkdir -p /mnt/usb && mount /dev/sda1 /mnt/usb
-dd if=/dev/mmcblk2 of=/mnt/usb/btv-b11-armbian.img bs=4M status=progress conv=fsync
-gzip -9 /mnt/usb/btv-b11-armbian.img   # reduz bastante o tamanho antes de subir
-```
-**Atenção:** isso demora (14,6 GiB) e é feito com o sistema rodando a partir da
-própria eMMC sendo lida — não é um clone "a frio" perfeito, mas é suficiente para
-reprodutibilidade prática. Como o arquivo `.img.gz` normalmente ultrapassa o limite
-do GitHub (100 MB por arquivo sem Git LFS), hospede-o num serviço externo (Google
-Drive, Zenodo, Internet Archive) e apenas linke o download a partir deste README.
-
-Dado o prazo, a opção **A é a que vale priorizar agora** — ela já satisfaz o pedido de
-reprodutibilidade (scripts e configurações públicas) sem depender de subir/hospedar
-um arquivo grande.
-
 ## Agradecimentos
 IFPR Campus Capanema, UTFPR Campus Francisco Beltrão, Receita Federal do Brasil, e ao
 professor orientador Ederson Kobs.
