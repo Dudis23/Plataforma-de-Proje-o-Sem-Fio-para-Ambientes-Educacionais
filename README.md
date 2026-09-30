@@ -26,7 +26,7 @@ projeção sem fio via Wi-Fi Direct/Miracast.
 | Armazenamento | eMMC, 14,6 GiB utilizáveis |
 | GPU / VPU | Mali-G31 (driver Panfrost) + VPU Amlogic Meson (`meson-drm`) |
 | Wi-Fi / Bluetooth | Broadcom BCM43430A1 (módulo combo AP6212A1), Wi-Fi Direct confirmado (P2P-client/GO/device) |
-| SO | Armbian Linux (aarch64) baseado no kernel (5.10) do debian|
+| SO | Armbian Linux (aarch64) baseado no kernel (5.10) do Debian|
 
 ## Arquitetura
 
